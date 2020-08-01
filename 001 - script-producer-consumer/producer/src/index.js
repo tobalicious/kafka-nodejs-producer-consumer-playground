@@ -1,4 +1,5 @@
 import kafka from 'kafka-node';
+import pJSON from '../package.json';
 
 const kafkaClient = new kafka.KafkaClient({ kafkaHost: '127.0.0.1:9092' });
 const kafkaProducer = new kafka.Producer(kafkaClient);
@@ -22,12 +23,16 @@ kafkaProducer.on('ready', () => {
         messages: msgData
       }
     ],
-    (err, data) => {
-      if (err) {
-        console.log(err);
+    (error, data) => {
+      if (error) {
+        console.log(`${pJSON.name} error: ${error}`);
       }
 
       console.log(data);
     }
   );
+});
+
+kafkaProducer.on('error', error => {
+  console.log(`${pJSON.name} error: ${error}`);
 });
